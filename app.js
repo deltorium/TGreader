@@ -137,9 +137,15 @@ function setDefaultDates(messages) {
     $('dateTo').value = '';
     return;
   }
-  const timestamps = messages.map(m => m.date.getTime());
-  const min = new Date(Math.min(...timestamps));
-  const max = new Date(Math.max(...timestamps));
+  let minTs = Infinity;
+  let maxTs = -Infinity;
+  for (const message of messages) {
+    const ts = message.date.getTime();
+    if (ts < minTs) minTs = ts;
+    if (ts > maxTs) maxTs = ts;
+  }
+  const min = new Date(minTs);
+  const max = new Date(maxTs);
   $('dateFrom').value = toDateInput(min);
   $('dateTo').value = toDateInput(max);
 }
@@ -160,7 +166,7 @@ function renderExcludeList(participants) {
 
   box.innerHTML = participants.map((p, i) => `
     <label class="chip" title="${escapeHtml(p.name)}">
-      <input type="checkbox" data-exclude-key="${escapeAttr(p.key)}" />
+      <input type="checkbox" data-exclude-key="${encodeURIComponent(p.key)}" />
       <span>${escapeHtml(p.name)}</span>
     </label>
   `).join('');
@@ -168,7 +174,7 @@ function renderExcludeList(participants) {
 
 function getExcludedKeys() {
   return new Set([...$('excludeBox').querySelectorAll('input[data-exclude-key]:checked')]
-    .map(el => el.dataset.excludeKey));
+    .map(el => decodeURIComponent(el.dataset.excludeKey)));
 }
 
 function calculate() {
@@ -296,6 +302,5 @@ function csvEscape(value) {
 function escapeHtml(str) {
   return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 }
-function escapeAttr(str) { return String(str).replace(/[^\w:.-]/g, '_'); }
 function showError(message) { $('errorBox').textContent = message; $('errorBox').hidden = false; }
 function hideError() { $('errorBox').hidden = true; $('errorBox').textContent = ''; }
