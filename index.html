@@ -48,6 +48,24 @@
           <span>Конец периода</span>
           <input id="dateTo" type="date" />
         </label>
+        <div class="quick-period-wrap">
+          <span class="field-title">Быстрый период</span>
+          <button class="secondary quick-toggle" id="quickPeriodBtn" type="button" disabled>
+            <span>Выбрать период</span><span class="chevron">⌄</span>
+          </button>
+          <div class="quick-menu" id="quickPeriodMenu" hidden>
+            <button type="button" data-period="1d">1 день</button>
+            <button type="button" data-period="2d">2 дня</button>
+            <button type="button" data-period="7d">7 дней</button>
+            <button type="button" data-period="1m">1 месяц</button>
+            <button type="button" data-period="2m">2 месяца</button>
+            <button type="button" data-period="3m">3 месяца</button>
+            <button type="button" data-period="6m">6 месяцев</button>
+            <button type="button" data-period="1y">1 год</button>
+            <button type="button" data-period="2y">2 года</button>
+            <button type="button" data-period="all">Весь период</button>
+          </div>
+        </div>
         <label>
           <span>Показывать в топе</span>
           <select id="topN">
@@ -63,10 +81,17 @@
       <div class="exclude-row">
         <div class="label-block">
           <span class="label">Исключить из топа</span>
-          <span class="hint">Например, ботов, админов или себя</span>
+          <span class="hint">Ищи по нику, @username или ID</span>
         </div>
-        <div class="exclude-box" id="excludeBox">
-          <div class="muted">Сначала загрузи JSON</div>
+        <div class="exclude-box">
+          <div class="exclude-search">
+            <input id="excludeSearch" type="search" placeholder="Начни вводить ник…" autocomplete="off" disabled />
+            <button class="clear-search" id="clearExcludeSearch" type="button" title="Очистить" aria-label="Очистить поиск">×</button>
+          </div>
+          <div class="exclude-selected" id="excludeSelected"></div>
+          <div class="exclude-results" id="excludeResults">
+            <div class="muted">Сначала загрузи JSON</div>
+          </div>
         </div>
       </div>
 
@@ -104,6 +129,14 @@
           <tbody id="resultsBody"></tbody>
         </table>
       </div>
+      <div class="copy-bar">
+        <div>
+          <strong id="selectedCount">0 выбрано</strong>
+          <span class="copy-hint">Отметь участников, чтобы скопировать их @username</span>
+        </div>
+        <button class="primary" id="copyUsernamesBtn" type="button" disabled>Скопировать выбранные</button>
+      </div>
+      <div class="copy-note" id="copyNote" hidden></div>
     </section>
 
     <section class="error card" id="errorBox" hidden></section>
