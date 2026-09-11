@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Определение самых активных участников Telegram-чата по экспорту JSON" />
+  <title>Telegram Chat Top</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">TELEGRAM · JSON</div>
+        <h1>Кто самый активный в чате?</h1>
+        <p class="subtitle">Загрузи экспорт Telegram, выбери период и получи рейтинг участников. Всё считается локально в браузере.</p>
+      </div>
+      <div class="privacy">🔒 Данные не загружаются на сервер</div>
+    </section>
+
+    <section class="card upload-card" id="dropzone">
+      <input id="fileInput" type="file" accept="application/json,.json" hidden />
+      <div class="upload-icon">↥</div>
+      <h2>Загрузи <span>result.json</span></h2>
+      <p>Перетащи JSON-файл сюда или выбери его вручную.</p>
+      <button class="primary" id="chooseFileBtn">Выбрать JSON</button>
+      <div class="file-state" id="fileState">Файл пока не выбран</div>
+    </section>
+
+    <section class="card controls-card">
+      <div class="section-head">
+        <div>
+          <h2>Параметры рейтинга</h2>
+          <p>Дата учитывается по времени сообщения из экспорта Telegram.</p>
+        </div>
+        <button class="ghost" id="resetBtn" type="button">Сбросить</button>
+      </div>
+
+      <div class="controls-grid">
+        <label>
+          <span>Начало периода</span>
+          <input id="dateFrom" type="date" />
+        </label>
+        <label>
+          <span>Конец периода</span>
+          <input id="dateTo" type="date" />
+        </label>
+        <label>
+          <span>Показывать в топе</span>
+          <select id="topN">
+            <option value="10">10 участников</option>
+            <option value="20">20 участников</option>
+            <option value="50">50 участников</option>
+            <option value="100">100 участников</option>
+            <option value="all">Всех</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="exclude-row">
+        <div class="label-block">
+          <span class="label">Исключить из топа</span>
+          <span class="hint">Например, ботов, админов или себя</span>
+        </div>
+        <div class="exclude-box" id="excludeBox">
+          <div class="muted">Сначала загрузи JSON</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary big" id="calculateBtn" type="button" disabled>Посчитать топ</button>
+        <button class="secondary big" id="exportBtn" type="button" disabled>Скачать CSV</button>
+      </div>
+    </section>
+
+    <section class="stats-grid" id="stats" hidden>
+      <div class="stat card"><div class="stat-label">Сообщений</div><div class="stat-value" id="statMessages">0</div></div>
+      <div class="stat card"><div class="stat-label">Участников</div><div class="stat-value" id="statUsers">0</div></div>
+      <div class="stat card"><div class="stat-label">Период</div><div class="stat-value small" id="statPeriod">—</div></div>
+    </section>
+
+    <section class="card results-card" id="results" hidden>
+      <div class="section-head results-head">
+        <div>
+          <div class="eyebrow">RANKING</div>
+          <h2>Топ участников</h2>
+        </div>
+        <div class="legend">Сортировка по количеству сообщений</div>
+      </div>
+      <div id="winner" class="winner"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Участник</th>
+              <th>Сообщений</th>
+              <th>Доля</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="error card" id="errorBox" hidden></section>
+
+    <footer>
+      <span>Telegram Chat Top</span>
+      <span>GitHub Pages ready · без бэкенда</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
